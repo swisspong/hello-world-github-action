@@ -1,0 +1,25 @@
+name: Build And Publish To GHCR
+
+on:
+  push:
+    branches:
+      - "main"
+env:
+  IMAGE_NAME: ghcr.io/swisspong/hello-world
+jobs:
+  build_publish_and_run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build and push to GHCR
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE_NAME }}:latest
+      - name: Inspect
+        run: |
+          docker buildx imagetools inspect ${{ env.IMAGE_NAME }}:latest
+      # - name: Run container
+      #   run: docker run ${{ env.IMAGE_NAME }}:latest
