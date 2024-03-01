@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - "main"
-
+env:
+  IMAGE_NAME: user/app
 jobs:
   docker:
     runs-on: ubuntu-latest
@@ -31,3 +32,12 @@ jobs:
       - name: Inspect
         run: |
           docker buildx imagetools inspect localhost:5000/name/app:latest
+      - name: Run the build process with Docker
+        uses: addnab/docker-run-action@v3
+        with:
+          image: localhost:5000/name/app:latest
+        #   options: -v ${{ github.workspace }}:/var/www
+        #   run: |
+        #     composer install
+        #     npm install
+        #     npm run production
